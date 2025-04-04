@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/kafka/producer/")
+@RequestMapping("/api/kafka/producer")
 public class ProducerController {
 
     @Autowired
     private KafkaService kafkaService;
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<?> ProducerMessage(@RequestBody Product product) {
 
         boolean status = kafkaService.sendObjectMessage(product);
@@ -27,8 +27,8 @@ public class ProducerController {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Data sending .. "));
     }
 
-    @GetMapping("{message}")
-    public ResponseEntity<?> ProducerMessage(@PathVariable("message") String message) {
+    @GetMapping("/{message}")
+    public ResponseEntity<?> ProducerMessage(@PathVariable String message) {
         boolean status = kafkaService.sendStringMessage(message);
         if (!status) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
